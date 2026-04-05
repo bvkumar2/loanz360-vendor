@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "export NODE_OPTIONS='--max-old-space-size=8192' && next build",
   "installCommand": "npm install --legacy-peer-deps --include=dev",
