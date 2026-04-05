@@ -1,11 +1,18 @@
 /**
  * Client-side Rate Limiter for Login Attempts
- * Enterprise-grade brute force protection
+ * UI/UX ONLY — NOT a security control
  *
- * SECURITY: Prevents automated attacks on authentication endpoints
- * - Tracks failed login attempts per email
- * - Implements exponential lockout
- * - Stores in localStorage (cleared on successful login)
+ * PURPOSE: Improves user experience by showing lockout warnings in the UI
+ * before the server responds. This is NOT a security mechanism.
+ *
+ * ACTUAL SECURITY: The server-side database-rate-limiter.ts handles real
+ * brute-force protection. This client-side limiter can be bypassed by
+ * clearing localStorage or using a different browser/device — that is fine
+ * because the server-side limiter will still block the attack by IP.
+ *
+ * - Tracks failed login attempts per email in localStorage
+ * - Shows remaining attempts and lockout countdown in the UI
+ * - Cleared on successful login
  */
 
 import * as React from 'react'

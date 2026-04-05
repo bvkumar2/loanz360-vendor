@@ -1,4 +1,4 @@
-﻿import type { NextRequest } from 'next/server'
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 // Commented out imports that don't exist - not needed for simple login
 // import { verifySessionToken, verifyAccessToken } from './tokens-edge'
@@ -87,7 +87,7 @@ export const ROUTE_PROTECTION = {
   '/partners/auth': null,
   '/employees/auth': null,
   '/customers/auth': null,
-  '/auth': null,
+  '/vendors/auth': null,
   '/master': null, // Development portal directory page
 } as const
 
@@ -229,9 +229,12 @@ async function verifySupabaseAuth(request: NextRequest): Promise<{ user: AuthUse
       return { user: null, response }
     }
 
-    // Get role and sub_role from user metadata (Supabase Auth metadata)
-    const role = session.user.user_metadata?.role || session.user.app_metadata?.role
-    const sub_role = session.user.user_metadata?.sub_role || session.user.app_metadata?.sub_role
+    // Get role and sub_role from Supabase Auth metadata
+    // SECURITY: Prefer app_metadata (server-only, set by service role) over user_metadata
+    // user_metadata can be modified by the user themselves via supabase.auth.updateUser()
+    // app_metadata can only be set server-side (admin API / service role)
+    const role = session.user.app_metadata?.role || session.user.user_metadata?.role
+    const sub_role = session.user.app_metadata?.sub_role || session.user.user_metadata?.sub_role
 
     logger.debug('[Supabase Auth] User data retrieved from metadata', { role, sub_role })
     if (!role || role.trim() === '') {
@@ -411,7 +414,7 @@ function getLoginUrl(pathname: string): string {
     return '/customers/auth/login'
   }
   if (pathname.startsWith('/vendors')) {
-    return '/auth/login'
+    return '/vendors/auth/login'
   }
 
   // Default login page

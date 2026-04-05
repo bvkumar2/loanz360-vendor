@@ -255,12 +255,18 @@ const AuthProviderComponent = ({ children }: AuthProviderProps) => {
       }
 
       clientLogger.debug('Signing out user')
-      const { error } = await supabase.auth.signOut()
 
-      if (error) {
-        setError(error)
-        return { error }
+      // SECURITY: Call server-side logout endpoint to invalidate session server-side
+      // This prevents token replay attacks (revokes refresh token in Supabase Auth)
+      try {
+        await fetch('/api/auth/logout', { method: 'POST' })
+      } catch {
+        // If server-side logout fails, still proceed with client-side signOut
+        clientLogger.warn('Server-side logout failed, falling back to client signOut')
+        await supabase.auth.signOut()
       }
+
+      const error = null
 
       setUser(null)
       setSession(null)
