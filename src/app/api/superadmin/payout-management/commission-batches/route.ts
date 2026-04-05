@@ -1,3 +1,33 @@
-// Re-export from the original batches API
-export { GET, POST } from '@/app/api/superadmin/payouts/batches/route'
+import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+
 export const dynamic = 'force-dynamic'
+
+export async function GET() {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('commission_batches')
+      .select('*')
+      .order('created_at', { ascending: false })
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ batches: data || [] })
+  } catch (err) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const supabase = await createClient()
+    const body = await request.json()
+    const { data, error } = await supabase
+      .from('commission_batches')
+      .insert([{ ...body, status: 'pending', created_at: new Date().toISOString() }])
+      .select().single()
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ batch: data })
+  } catch (err) {
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}
