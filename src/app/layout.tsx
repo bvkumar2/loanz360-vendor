@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastProvider } from "@/contexts/ToastContext";
 import { Toaster } from 'sonner';
 import { ThemeProvider } from "@/lib/contexts/theme-context";
+import { AuthProvider } from "@/lib/auth/auth-context";
 
 // Force all pages to be dynamically rendered - reduces build time significantly
 export const dynamic = 'force-dynamic';
@@ -38,9 +39,11 @@ export default function RootLayout({
     <html lang="en" className={poppins.variable}>
       <body className={poppins.className}>
         <ThemeProvider>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
+          <AuthProvider>
+            <ToastProvider>
+              {children}
+            </ToastProvider>
+          </AuthProvider>
         </ThemeProvider>
         <Toaster
           position="top-right"
