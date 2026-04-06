@@ -83,7 +83,7 @@ export default function VendorLoginPage() {
 
       clientLogger.info('Vendor login successful', { email: data.email })
       rateLimit.clearAttempts()
-      router.push('/vendors')
+      router.push('/portfolio')
       router.refresh()
     } catch (err) {
       clientLogger.error('Vendor login exception', { email: data.email, error: err instanceof Error ? err.message : String(err) })
@@ -93,7 +93,7 @@ export default function VendorLoginPage() {
 
   React.useEffect(() => {
     if (!loading && user && user.role === 'VENDOR') {
-      router.push('/vendors')
+      router.push('/portfolio')
     }
   }, [user, loading, router])
 
