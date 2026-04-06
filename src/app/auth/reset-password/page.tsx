@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Logo } from '@/components/ui/logo'
 import { PasswordStrengthMeter } from '@/components/ui/password-strength-meter'
 import { clientLogger } from '@/lib/utils/client-logger'
-import supabaseClient from '@/lib/supabase/client'
+import { createSupabaseClient } from '@/lib/supabase/client'
 import { VALIDATION_RULES } from '@/lib/constants'
 
 const resetPasswordSchema = z.object({
@@ -47,7 +47,8 @@ export default function VendorResetPasswordPage() {
         const token = searchParams.get('token')
         const type = searchParams.get('type')
         if (!token || type !== 'recovery') { setTokenValid(false); setValidatingToken(false); return }
-        const { data, error } = await supabaseClient.auth.getSession()
+        const supabase = createSupabaseClient()
+        const { data, error } = await supabase.auth.getSession()
         setTokenValid(!error && !!data.session)
       } catch { setTokenValid(false) }
       finally { setValidatingToken(false) }
@@ -58,7 +59,8 @@ export default function VendorResetPasswordPage() {
   const onSubmit = async (data: ResetPasswordInput) => {
     setSubmitError(null)
     try {
-      const { error } = await supabaseClient.auth.updateUser({ password: data.password })
+      const supabase = createSupabaseClient()
+      const { error } = await supabase.auth.updateUser({ password: data.password })
       if (error) { setSubmitError(error.message || 'Failed to reset password. Please try again.'); return }
       clientLogger.info('Vendor password reset successful')
       setSubmitSuccess(true)
