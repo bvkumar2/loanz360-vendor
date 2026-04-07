@@ -82,7 +82,7 @@ export default function VendorProfileClient() {
   const loadProfileData = async () => {
     try {
       setLoading(true)
-      const response = await fetch('/api/profile')
+      const response = await fetch('/api/admin/profile')
 
       if (response.ok) {
         const data = await response.json()
@@ -135,7 +135,7 @@ export default function VendorProfileClient() {
       const formData = new FormData()
       formData.append('photo', file)
 
-      const response = await fetch('/api/profile/upload-photo', {
+      const response = await fetch('/api/admin/profile/upload-photo', {
         method: 'POST',
         body: formData
       })
@@ -195,7 +195,7 @@ export default function VendorProfileClient() {
     setSaving(true)
 
     try {
-      const response = await fetch('/api/profile', {
+      const response = await fetch('/api/admin/profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

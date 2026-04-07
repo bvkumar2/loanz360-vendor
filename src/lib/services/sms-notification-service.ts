@@ -53,7 +53,7 @@ export class SMSNotificationService {
 
       // Uncomment when integrating with actual SMS service (Twilio example):
       /*
-      const response = await fetch('/api/send-sms', {
+      const response = await fetch('/api/notifications/send-sms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

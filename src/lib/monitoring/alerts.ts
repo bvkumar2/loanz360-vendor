@@ -145,7 +145,7 @@ class AlertManager {
     try {
       const recipients = process.env.ALERT_EMAIL_RECIPIENTS?.split(',') || [];
 
-      await fetch('/api/internal/send-alert-email', {
+      await fetch('/api/notifications/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -204,7 +204,7 @@ class AlertManager {
       const recipients = process.env.ALERT_SMS_RECIPIENTS?.split(',') || [];
 
       for (const recipient of recipients) {
-        await fetch('/api/internal/send-sms', {
+        await fetch('/api/notifications/send-sms', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

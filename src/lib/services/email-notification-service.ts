@@ -51,7 +51,7 @@ export class EmailNotificationService {
 
       // Uncomment when integrating with actual email service:
       /*
-      const response = await fetch('/api/send-email', {
+      const response = await fetch('/api/notifications/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
