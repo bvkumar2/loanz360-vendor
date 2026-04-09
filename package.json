@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "dev:turbo": "next dev --turbopack",
+    "dev": "next dev --port 3005",
+    "dev:turbo": "next dev --turbo --port 3005",
     "build": "NEXT_TELEMETRY_DISABLED=1 next build",
     "build:local": "set NODE_ENV=production&& set NODE_OPTIONS=--max-old-space-size=8192&& next build",
     "build:turbo": "set NODE_ENV=production&& set NODE_OPTIONS=--max-old-space-size=8192&& next build --turbopack",
